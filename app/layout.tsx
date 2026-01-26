@@ -23,6 +23,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Portal Sekolah",
   description: "Admin Panel",
+  colorScheme: "light",
 };
 
 export default function RootLayout({
