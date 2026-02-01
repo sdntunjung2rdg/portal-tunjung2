@@ -63,18 +63,18 @@ export default function Dashboard() {
             <div className="row">
 
               {/* BOX 1 */}
-              <div className="col-lg-3 col-6">
-                <div className="small-box bg-info">
-                  <div className="inner">
-                    <h3>150</h3>
-                    <p>Surat Masuk / Keluar</p>
+              <div className="col-lg-2 col-6">
+                <div className="small-box bg-warning">
+                  <div className="inner text-center">
+                    <h3><i className="fas fa-database"></i></h3>
                   </div>
                   <a
-                    href="/admin/surat/surat-masuk"
-                    className="small-box-footer"
+                    href="/admin/master"
+                    className="small-box-footer text-decoration-none"
                   >
-                    More info <i className="fas fa-arrow-circle-right" />
+                    Manageman <i className="fas fa-arrow-circle-right" />
                   </a>
+
                 </div>
               </div>
 

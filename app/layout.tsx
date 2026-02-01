@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
-// CSS WAJIB
+// ===== CSS GLOBAL (WAJIB) =====
+import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "admin-lte/dist/css/adminlte.min.css";
-
 import "./globals.css";
 
-// Client loader AdminLTE
+// ===== CLIENT PROVIDER =====
 import AdminLTEProvider from "./components/AdminLTEProvider";
 
 const geistSans = Geist({
@@ -38,12 +38,12 @@ export default function RootLayout({
           hold-transition
           sidebar-mini
           layout-fixed
+          bg-body-tertiary
           ${geistSans.variable}
           ${geistMono.variable}
           antialiased
         `}
       >
-        {/* WAJIB: AdminLTE JS di Client Component */}
         <AdminLTEProvider>
           {children}
         </AdminLTEProvider>
