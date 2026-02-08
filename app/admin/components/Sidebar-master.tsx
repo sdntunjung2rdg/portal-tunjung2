@@ -10,7 +10,7 @@ export default function Sidebar() {
     pathname === path || pathname.startsWith(path + "/");
 
   return (
-    <aside className="app-sidebar bg-dark shadow" data-bs-theme="dark">
+    <aside className="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
       {/* BRAND */}
       <div className="sidebar-brand">
         <Link href="/admin/dashboard" className="brand-link">

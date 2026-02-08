@@ -12,9 +12,13 @@ export default function MasterLayout({
       <Navbar />
       <Sidebar />
 
-      <div className="app-main">
-        {children}
-      </div>
+      <main className="app-main">
+        <div className="app-content">
+          <div className="container-fluid">
+            {children}
+          </div>
+        </div>
+      </main>
 
       <Footer />
     </div>

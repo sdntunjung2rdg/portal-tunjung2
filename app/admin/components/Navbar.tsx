@@ -11,17 +11,16 @@ export default function Navbar() {
                         <a
                             className="nav-link"
                             data-lte-toggle="sidebar"
-                            href="#"
                             role="button"
                         >
-                            <i className="bi bi-list"></i>
+                            <i className="fas fa-bars"></i>
                         </a>
                     </li>
                     <li className="nav-item d-none d-md-block">
-                        <a href="#" className="nav-link">Home</a>
+                        <a href="/admin/dashboard" className="nav-link"><i className="nav-icon fas fa-home"></i></a>
                     </li>
                     <li className="nav-item d-none d-md-block">
-                        <a href="#" className="nav-link">Contact</a>
+                        <a href="#" className="nav-link"><i className="nav-icon fas fa-user"></i></a>
                     </li>
                 </ul>
                 {/* end::Start Navbar Links */}
@@ -31,7 +30,7 @@ export default function Navbar() {
                     {/* begin::Navbar Search */}
                     <li className="nav-item">
                         <a className="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i className="bi bi-search"></i>
+                            <i className="fas fa-search"></i>
                         </a>
                     </li>
                     {/* end::Navbar Search */}
