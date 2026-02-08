@@ -38,14 +38,14 @@ export default function RootLayout({
     <html lang="id">
       <body
         className={`
-          layout-fixed fixed-header fixed-footer sidebar-expand-lg sidebar-open bg-body-tertiary
+          layout-fixed fixed-header fixed-footer sidebar-expand-lg bg-body-tertiary
 
     ${geistSans.variable}
     ${geistMono.variable}
     antialiased
   `}
       >
-        
+
         <AuthProvider>
           <AdminLTEProvider>
             {children}

@@ -1,10 +1,41 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import { useEffect } from "react";
 
 export default function Navbar() {
     const { user } = useAuth();
-    
+
+    const toggleSidebar = () => {
+        const body = document.body;
+
+        if (body.classList.contains("sidebar-collapse")) {
+            body.classList.remove("sidebar-collapse");
+            body.classList.add("sidebar-open");
+        } else {
+            body.classList.add("sidebar-collapse");
+            body.classList.remove("sidebar-open");
+        }
+    }
+
+    useEffect(() => {
+        const handleClick = () => {
+            if (window.innerWidth < 992) {
+                document.body.classList.remove("sidebar-open");
+            }
+        };
+
+        document
+            .querySelector(".app-main")
+            ?.addEventListener("click", handleClick);
+
+        return () => {
+            document
+                .querySelector(".app-main")
+                ?.removeEventListener("click", handleClick);
+        };
+    }, []);
+
     return (
         <nav className="app-header navbar navbar-expand bg-danger" data-bs-theme="dark">
             {/* begin::Container */}
@@ -12,13 +43,9 @@ export default function Navbar() {
                 {/* begin::Start Navbar Links */}
                 <ul className="navbar-nav">
                     <li className="nav-item">
-                        <a
-                            className="nav-link"
-                            data-lte-toggle="sidebar"
-                            role="button"
-                        >
+                        <button className="nav-link" onClick={toggleSidebar}>
                             <i className="fas fa-bars"></i>
-                        </a>
+                        </button>
                     </li>
                     <li className="nav-item d-none d-md-block">
                         <a href="/admin/dashboard" className="nav-link"><i className="nav-icon fas fa-home"></i></a>
@@ -186,7 +213,7 @@ export default function Navbar() {
                                     alt="User Image"
                                 />
                                 <p>
-                                     {user?.username || "User"} - Web Developer
+                                    {user?.username || "User"} - Web Developer
                                     <small>Member since Nov. 2023</small>
                                 </p>
                             </li>

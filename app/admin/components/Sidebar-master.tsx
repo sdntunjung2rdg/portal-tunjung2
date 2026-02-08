@@ -17,6 +17,14 @@ export default function Sidebar() {
   const handleLogout = async () => {
     await signOut(auth);
     router.push("/login");
+
+    // 🔥 auto close sidebar di mobile saat klik menu
+    const closeSidebarMobile = () => {
+      if (window.innerWidth < 992) {
+        document.body.classList.remove("sidebar-open");
+        document.body.classList.remove("sidebar-collapse");
+      }
+    }
   };
 
   return (
