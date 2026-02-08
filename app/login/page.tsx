@@ -16,42 +16,55 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
 
-    try {
-      // 1. Login Firebase Auth
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+  try {
+    // 1. Login Firebase Auth
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
 
-      const uid = userCredential.user.uid;
+    const uid = userCredential.user.uid;
 
-      // 2. Ambil role dari Firestore
-      const userDoc = await getDoc(doc(db, 'users', uid));
+    // 2. Ambil data user Firestore
+    const userDoc = await getDoc(doc(db, 'users', uid));
 
-      if (!userDoc.exists()) {
-        throw new Error('Role user tidak ditemukan');
-      }
-
-      const { role } = userDoc.data();
-
-      // 3. Redirect berdasarkan role
-      if (role === 'admin') router.push('/admin/dashboard');
-      else if (role === 'guru') router.push('/guru/dashboard');
-      else if (role === 'siswa') router.push('/siswa/dashboard');
-      else throw new Error('Role tidak valid');
-
-    } catch (err: any) {
-      setError(err.message || 'Login gagal');
-    } finally {
-      setLoading(false);
+    if (!userDoc.exists()) {
+      throw new Error('User tidak ditemukan');
     }
-  };
+
+    const data = userDoc.data();
+    const role = data.role;
+    const username = data.username;
+
+    // 3. Simpan ke localStorage (agar navbar bisa baca cepat)
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        uid,
+        role,
+        username,
+        email: userCredential.user.email,
+      })
+    );
+
+    // 4. Redirect berdasarkan role
+    if (role === 'admin') router.push('/admin/dashboard');
+    else if (role === 'guru') router.push('/admin/guru/dashboard');
+    else if (role === 'siswa') router.push('/siswa/dashboard');
+    else throw new Error('Role tidak valid');
+
+  } catch (err: any) {
+    setError(err.message || 'Login gagal');
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="container-fluid min-vh-100 login-wrapper">

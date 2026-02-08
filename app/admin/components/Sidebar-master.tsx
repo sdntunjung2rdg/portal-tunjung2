@@ -1,13 +1,23 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
+import { signOut } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const { user } = useAuth(); // ambil user + role + username
 
   const isActive = (path: string) =>
     pathname === path || pathname.startsWith(path + "/");
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/login");
+  };
 
   return (
     <aside className="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
@@ -29,61 +39,88 @@ export default function Sidebar() {
             role="menu"
             data-accordion="false"
           >
-            {/* DASHBOARD */}
-            <li className="nav-item">
-              <Link
-                href="/admin/dashboard"
-                className={`nav-link ${isActive("/admin/dashboard") ? "active" : ""}`}
-              >
-                <i className="nav-icon fas fa-home"></i>
-                <p>Menu Utama</p>
-              </Link>
-            </li>
 
-            {/* BERANDA MASTER */}
-            <li className="nav-item">
-              <Link
-                href="/admin/master"
-                className={`nav-link ${isActive("/admin/master") ? "active bg-danger text-white" : ""}`}
-              >
-                <i className="nav-icon fas fa-chart-line"></i>
-                <p>Beranda</p>
-              </Link>
-            </li>
+            {/* DASHBOARD — ADMIN SAJA */}
+            {user?.role === "admin" && (
+              <li className="nav-item">
+                <Link
+                  href="/admin/dashboard"
+                  className={`nav-link ${isActive("/admin/dashboard") ? "active" : ""}`}
+                >
+                  <i className="nav-icon fas fa-home"></i>
+                  <p>Menu Utama</p>
+                </Link>
+              </li>
+            )}
 
-            {/* USERS */}
-            <li className="nav-item">
-              <Link
-                href="/admin/master/users"
-                className={`nav-link ${isActive("/admin/master/users") ? "active bg-danger text-white" : ""}`}
-              >
-                <i className="nav-icon fas fa-users"></i>
-                <p>Pengguna</p>
-              </Link>
-            </li>
+            {/* MASTER — ADMIN */}
+            {user?.role === "admin" && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    href="/admin/master"
+                    className={`nav-link ${isActive("/admin/master") ? "active bg-danger text-white" : ""}`}
+                  >
+                    <i className="nav-icon fas fa-chart-line"></i>
+                    <p>Beranda</p>
+                  </Link>
+                </li>
 
+                <li className="nav-item">
+                  <Link
+                    href="/admin/master/users"
+                    className={`nav-link ${isActive("/admin/master/users") ? "active bg-danger text-white" : ""}`}
+                  >
+                    <i className="nav-icon fas fa-users"></i>
+                    <p>Pengguna</p>
+                  </Link>
+                </li>
 
+                <li className="nav-item">
+                  <Link
+                    href="/admin/master/sekolah"
+                    className={`nav-link ${isActive("/admin/master/sekolah") ? "active bg-danger text-white" : ""}`}
+                  >
+                    <i className="nav-icon fas fa-school"></i>
+                    <p>Data Sekolah</p>
+                  </Link>
+                </li>
+              </>
+            )}
 
-            {/* SURAT */}
-            <li className="nav-item">
-              <Link
-                href="/admin/master/sekolah"
-                className={`nav-link ${isActive("/admin/master/sekolah") ? "active bg-danger text-white" : ""}`}
-              >
-                <i className="nav-icon fas fa-school"></i>
-                <p>Data Sekolah</p>
-              </Link>
-            </li>
+            {/* MENU GURU */}
+            {user?.role === "guru" && (
+              <>
+                <li className="nav-item">
+                  <Link
+                    href="/admin/guru/dashboard"
+                    className={`nav-link ${isActive("/admin/guru/dashboard") ? "active" : ""}`}
+                  >
+                    <i className="nav-icon fas fa-chalkboard-teacher"></i>
+                    <p>Dashboard Guru</p>
+                  </Link>
+                </li>
 
-
+                <li className="nav-item">
+                  <Link
+                    href="/admin/guru/profil"
+                    className={`nav-link ${isActive("/admin/guru/profil") ? "active bg-danger text-white" : ""}`}
+                  >
+                    <i className="nav-icon fas fa-users"></i>
+                    <p>Profil</p>
+                  </Link>
+                </li>
+              </>
+            )}
 
             {/* LOGOUT */}
             <li className="nav-item mt-3">
-              <Link href="/login" className="nav-link text-danger">
+              <button onClick={handleLogout} className="nav-link text-danger">
                 <i className="nav-icon fas fa-sign-out-alt"></i>
                 <p>Logout</p>
-              </Link>
+              </button>
             </li>
+
           </ul>
         </nav>
       </div>

@@ -1,6 +1,10 @@
 "use client";
 
+import { useAuth } from "@/context/AuthContext";
+
 export default function Navbar() {
+    const { user } = useAuth();
+    
     return (
         <nav className="app-header navbar navbar-expand bg-danger" data-bs-theme="dark">
             {/* begin::Container */}
@@ -171,7 +175,7 @@ export default function Navbar() {
                                 className="user-image rounded-circle shadow"
                                 alt="User Image"
                             />
-                            <span className="d-none d-md-inline">Alexander Pierce</span>
+                            <span className="d-none d-md-inline"> {user?.username || "User"}</span>
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg dropdown-menu-end">
                             {/*begin::User Image*/}
@@ -182,7 +186,7 @@ export default function Navbar() {
                                     alt="User Image"
                                 />
                                 <p>
-                                    Alexander Pierce - Web Developer
+                                     {user?.username || "User"} - Web Developer
                                     <small>Member since Nov. 2023</small>
                                 </p>
                             </li>

@@ -7,6 +7,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "admin-lte/dist/css/adminlte.min.css";
 import "./globals.css";
+import { AuthProvider } from '@/context/AuthContext';
+import RoleGuard from "@/context/RoleGuard";
 
 // ===== CLIENT PROVIDER =====
 import AdminLTEProvider from "./components/AdminLTEProvider";
@@ -43,9 +45,12 @@ export default function RootLayout({
     antialiased
   `}
       >
-        <AdminLTEProvider>
-          {children}
-        </AdminLTEProvider>
+        
+        <AuthProvider>
+          <AdminLTEProvider>
+            {children}
+          </AdminLTEProvider>
+        </AuthProvider>
       </body>
     </html>
   );
