@@ -22,84 +22,95 @@ export default function UsersPage() {
 
   const [file, setFile] = useState<File | null>(null);
 
-  // 🔹 Ambil data berdasarkan UID
+  // ambil data berdasarkan UID
   useEffect(() => {
     const getProfilGuru = async () => {
       try {
+        // tunggu sampai auth siap
         if (!user?.uid) return;
+
+        setLoading(true);
 
         const ref = doc(db, "users", user.uid);
         const snap = await getDoc(ref);
 
         if (snap.exists()) {
-          const data = snap.data();
-
           setProfil({
-            username: data.username || "",
-            nip: data.nip || "",
-            kelas: data.kelas || "",
-            email: data.email || user.email || "",
-            foto: data.foto || "",
+            username: snap.data().username || "",
+            nip: snap.data().nip || "",
+            kelas: snap.data().kelas || "",
+            email: snap.data().email || user.email || "",
+            foto: snap.data().foto || "",
           });
         }
+
+        setLoading(false); // 🔥 WAJIB
       } catch (err) {
         console.log("Gagal ambil profil:", err);
-      } finally {
-        setLoading(false); // ⬅ WAJIB supaya tidak loading terus
+        setLoading(false);
       }
     };
 
     getProfilGuru();
-  }, [user]);
+  }, [user?.uid]);
 
-  // 🔹 Upload foto ke Google Drive
+
+  // upload foto ke Google Drive via API route
   const uploadFoto = async () => {
     if (!file) return profil.foto;
 
-    try {
-      const formData = new FormData();
-      formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-      const res = await fetch("/api/upload-drive", {
-        method: "POST",
-        body: formData,
+    const res = await fetch("/api/upload-drive", {
+      method: "POST",
+      body: formData,
+    });
+
+    const data = await res.json();
+    return data.url;
+  };
+
+  const handleUpdate = async () => {
+    if (!user?.uid) return alert("User belum login");
+
+    try {
+      const ref = doc(db, "users", user.uid);
+
+      await updateDoc(ref, {
+        username: profil.username,
+        nip: profil.nip,
+        kelas: profil.kelas,
+        email: profil.email,
+        updatedAt: new Date(),
       });
 
-      if (!res.ok) throw new Error("Upload gagal");
-
-      const data = await res.json();
-
-      if (!data.url) throw new Error("URL tidak diterima dari API");
-
-      return data.url;
+      alert("Profil berhasil diperbarui");
     } catch (err) {
-      console.log("Upload error:", err);
-      alert("Upload foto gagal");
-      return profil.foto;
+      console.error(err);
+      alert("Gagal update profil");
     }
   };
 
-  // 🔹 Simpan semua perubahan (profil + foto)
+
+  // simpan perubahan
   const handleSave = async () => {
-    if (!user?.uid) return alert("User belum login");
+    if (!user?.uid) return;
 
     setSaving(true);
 
     try {
       let fotoUrl = profil.foto;
 
-      // upload foto dulu
       if (file) {
         fotoUrl = await uploadFoto();
       }
 
-      // update firestore
       await updateDoc(doc(db, "users", user.uid), {
         username: profil.username,
         nip: profil.nip,
         kelas: profil.kelas,
         foto: fotoUrl,
-        updatedAt: new Date(),
       });
 
       setProfil({ ...profil, foto: fotoUrl });
@@ -136,34 +147,11 @@ export default function UsersPage() {
           <div className="card">
             <div className="card-header d-flex justify-content-between">
               <h3 className="card-title">Profil Guru</h3>
-
-              {!edit ? (
-                <button className="btn btn-warning" onClick={() => setEdit(true)}>
-                  Edit Profil
-                </button>
-              ) : (
-                <div>
-                  <button
-                    className="btn btn-secondary me-2"
-                    onClick={() => setEdit(false)}
-                  >
-                    Batal
-                  </button>
-                  <button
-                    className="btn btn-primary"
-                    onClick={handleSave}
-                    disabled={saving}
-                  >
-                    {saving ? "Menyimpan..." : "Simpan"}
-                  </button>
-                </div>
-              )}
             </div>
-
             <div className="card-body">
-              {loading ? (
-                <p>Memuat data...</p>
-              ) : (
+              {loading && <p>Memuat data...</p>}
+
+              {!loading && (
                 <div className="row">
                   <div className="col-md-8">
 
@@ -215,7 +203,7 @@ export default function UsersPage() {
                       </div>
                     </div>
 
-                    {/* Email */}
+                    {/* Email (readonly dari auth) */}
                     <div className="row mb-3">
                       <label className="col-sm-3 col-form-label">Email</label>
                       <div className="col-sm-9">
@@ -247,6 +235,29 @@ export default function UsersPage() {
                       />
                     )}
                   </div>
+                </div>
+
+              )}
+
+              {!edit ? (
+                <button className="btn btn-warning" onClick={() => setEdit(true)}>
+                  Edit Profil
+                </button>
+              ) : (
+                <div>
+                  <button
+                    className="btn btn-secondary me-2"
+                    onClick={() => setEdit(false)}
+                  >
+                    Batal
+                  </button>
+                  <button
+                    className="btn btn-primary"
+                    onClick={handleUpdate}
+                    disabled={saving}
+                  >
+                    {saving ? "Menyimpan..." : "Simpan"}
+                  </button>
                 </div>
               )}
             </div>

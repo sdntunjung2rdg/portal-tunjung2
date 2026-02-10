@@ -20,18 +20,35 @@ export default function UsersPage() {
 
       {/* Content */}
       <div className="app-content">
-        <div className="container-fluid">
-          <div className="card">
-            <div className="card-header">
-              <h3 className="card-title">Selamat Datang!</h3>
-            </div>
-
-            <div className="card-body">
-              <p>Halaman ini digunakan untuk mengelola data sekolah.</p>
-             
-            </div>
+        {/* ALERT */}
+        <div className="container-fluid mb-3">
+          <div className="callout callout-info">
+            <h5>
+              <i className="icon fas fa-exclamation-triangle" />{' '}
+              <b>Selamat datang!</b>
+            </h5>
+            <a
+              href="https://getbootstrap.com/docs/5.3/components/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="callout-link"
+            >
+            </a>
+            <hr />
+            Portal ini merupakan media informasi dan komunikasi sekolah yang
+            bertujuan untuk memberikan layanan informasi secara cepat,
+            transparan, dan mudah diakses oleh seluruh warga sekolah serta
+            masyarakat.
+            <br />Kelola data pembelajaran, profil, dan aktivitas sekolah Anda dengan mudah melalui panel ini.
+            <br />- Melihat ringkasan aktivitas mengajar
+            <br />- Mengelola profil dan data pribadi
+            <br />- Mengakses informasi sekolah terbaru
+            <br />- Memantau tugas dan laporan pembelajaran
+            <br />- Gunakan menu di samping untuk mulai bekerja.
           </div>
         </div>
+        {/* /.container-fluid */}
+
       </div>
     </main>
   );

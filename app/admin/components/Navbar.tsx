@@ -47,25 +47,11 @@ export default function Navbar() {
                             <i className="fas fa-bars"></i>
                         </button>
                     </li>
-                    <li className="nav-item d-none d-md-block">
-                        <a href="/admin/dashboard" className="nav-link"><i className="nav-icon fas fa-home"></i></a>
-                    </li>
-                    <li className="nav-item d-none d-md-block">
-                        <a href="#" className="nav-link"><i className="nav-icon fas fa-user"></i></a>
-                    </li>
                 </ul>
                 {/* end::Start Navbar Links */}
 
                 {/* begin::End Navbar Links */}
                 <ul className="navbar-nav ms-auto">
-                    {/* begin::Navbar Search */}
-                    <li className="nav-item">
-                        <a className="nav-link" data-widget="navbar-search" href="#" role="button">
-                            <i className="fas fa-search"></i>
-                        </a>
-                    </li>
-                    {/* end::Navbar Search */}
-
                     {/*begin::Messages Dropdown Menu*/}
                     <li className="nav-item dropdown">
                         <a className="nav-link" data-bs-toggle="dropdown" href="#">

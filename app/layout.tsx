@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 // ===== CSS GLOBAL (WAJIB) =====
@@ -26,6 +26,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Portal Sekolah",
   description: "Admin Panel",
+};
+
+export const viewport: Viewport = {
   colorScheme: "light",
 };
 
